@@ -14,6 +14,7 @@ public class Cube : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private bool _isContact = false;
+    private Color _baseColor;
     private Quaternion _currentRotation;
     private WaitForSeconds _wait;
 
@@ -23,12 +24,16 @@ public class Cube : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _meshRenderer = GetComponent<MeshRenderer>();
+        _baseColor = _meshRenderer.material.color;
         _wait = new WaitForSeconds(UnityEngine.Random.Range(_minDelay, _maxDelay));
     }
 
-    public void HandleCollision()
+    private void OnCollisionEnter(Collision collision)
     {
         if (_isContact)
+            return;
+
+        if (collision.gameObject.TryGetComponent(out Platform platform) == false)
             return;
 
         _isContact = true;
@@ -44,8 +49,11 @@ public class Cube : MonoBehaviour
     public void ResetState()
     {
         _isContact = false;
+        SetColor(_baseColor);
+
         _currentRotation.eulerAngles = Vector3.zero;
         transform.rotation = _currentRotation;
+
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
     }

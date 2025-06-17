@@ -11,7 +11,6 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _repaetRate;
 
     private ObjectPool<Cube> _pool;
-    private Color _prefabColor;
     private WaitForSeconds _wait;
 
     private void Awake()
@@ -25,8 +24,6 @@ public class Spawner : MonoBehaviour
             defaultCapacity: _poolCapacity,
             maxSize: _poolCapacity);
 
-        _prefabColor = _prefab.GetComponent<MeshRenderer>().sharedMaterial.color;
-
         _wait = new WaitForSeconds(_repaetRate);
     }
 
@@ -38,7 +35,6 @@ public class Spawner : MonoBehaviour
     private void ActionOnGet(Cube cube)
     {
         cube.ResetState();
-        cube.SetColor(_prefabColor);
 
         Vector3 spawnOffset = Random.insideUnitSphere * _spawnRadius;
         spawnOffset.y = Mathf.Abs(spawnOffset.y);
